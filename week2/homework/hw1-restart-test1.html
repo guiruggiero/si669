@@ -1,0 +1,65 @@
+<!-- SI 669 - HW 1 -->
+<!-- Developed by Gui Ruggiero -->
+<!-- Repo: https://github.com/SI669-classroom-f20/hw1-timer-guiruggiero -->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>n Second Timer</title>
+</head>
+
+<body>
+  <script>
+    let t = []; // timers
+    let k; // timer counter
+    
+    function restart() {
+      // clears existing timers
+      for (let i = 1; i <= k - 1; i += 1){
+        clearTimeout(t[i]);
+      }
+
+      // gets the number of seconds provided by the user
+      let userInput = document.getElementById("seconds").value;
+
+      // error validation - number of seconds must be greater than zero
+      if (userInput == 0) {
+        document.getElementById("warning").innerHTML = "(must be >0)";
+        return;
+      }
+      document.getElementById("warning").innerHTML = "";
+
+      // first change on the page to the timer duration, before the timers are initialized
+      document.getElementById("timer").innerHTML = userInput;
+
+      k = 1; // timer counter
+
+      // sets the timers
+      for (i = userInput - 1; i >= 0; i -= 1){
+        // current second of the timer
+        if (i != 0) {
+          t[k] = setTimeout(() => document.getElementById("timer").innerHTML = i, k * 1000);
+        }
+        
+        // shows it's done instead of zero
+        else {
+          t[k] = setTimeout(() => document.getElementById("timer").innerHTML = "Timer done!", k * 1000);
+        }
+
+        k += 1;
+      }
+    }
+  </script>
+  
+  <h1 id="timer">Click button to start</h1>
+  <br>
+
+  <!-- warning to avoid timer with zero seconds -->
+  <p id="prompt">Countdown seconds: <mark id="warning" style="color:red;"></mark></p>
+  <input id="seconds" type="number" autocomplete="off" min="1" step="1" value="10"></input>
+  <br><br><br><br>
+
+  <button type="button" onclick="restart()">Restart</button>
+  
+</body>
+</html>
