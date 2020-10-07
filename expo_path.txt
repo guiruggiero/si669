@@ -1,0 +1,3 @@
+yarn global bin
+
+export PATH="$PATH:/home/guilhermeruggiero/.yarn/bin"
