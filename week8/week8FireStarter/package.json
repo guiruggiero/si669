@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "firebase": "^7.24.0",
+    "node-fetch": "^2.6.1"
+  }
+}
