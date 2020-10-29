@@ -1,0 +1,5 @@
+node_modules/**/*
+Secrets.js
+
+# Annoying Mac OS file
+.DS_Store
