@@ -14,18 +14,18 @@ class HomeScreen extends React.Component{
     }
   }
 
-  onFocus = () => {
-    console.log('HomeScreen received focus.');
-    if (this.props.route.params) {
-      this.setState({message: this.props.route.params.detailsMessage});
-    }
-  }
-
   componentDidMount() {
     console.log("HomeScreen did mount.");
     this.props.navigation.addListener(
       'focus', this.onFocus
     );
+  }
+
+  onFocus = () => {
+    console.log('HomeScreen received focus.');
+    if (this.props.route.params) {
+      this.setState({message: this.props.route.params.detailsMessage});
+    }
   }
 
   render() {
