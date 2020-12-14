@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import '@firebase/firestore';
-import { firebaseConfig } from './Secrets.js';
+import { firebaseConfig } from './secrets.js';
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -9,7 +9,7 @@ const db = firebase.firestore();
 function update1234() {
   let newVal = Math.round(Math.random() * 100);
   db.doc('/values/1234').set({value: newVal});
-  console.log("changed value to ", newVal);
+  console.log("Changed value to ", newVal);
 }
 
 //inventory CRUD
@@ -42,7 +42,7 @@ function deleteItem(id) {
   itemDoc.delete();
 }
 
-function getItem(id) {
+function getItemPromise(id) {
   let inventoryRef = db.collection('inventory');
   inventoryRef.doc(id).get().then((docSnap => {
     console.log('Got data:', docSnap.data());
@@ -55,7 +55,7 @@ async function getItemAsync(id) {
   console.log('Got data:', docSnap.data());
 }
 
-function getCollection(collName) {
+function getCollectionPromise(collName) {
   let inventoryRef = db.collection(collName);
   inventoryRef.get().then((querySnap) => {
     for (let qDocSnap of querySnap.docs) {
@@ -72,21 +72,14 @@ async function getCollectionAsync(collName) {
   }
 }
 
-async function getCollectionAsyncForEach(collName) {
-  let inventoryRef = db.collection(collName);
-  let querySnap = await inventoryRef.get();
-  querySnap.forEach((qDocSnap) => {
-    console.log(qDocSnap.id, ":", qDocSnap.data());
-  });
-}
-
 function main() {
-//   updateQuantity('vQZ2hfMlMs2Rsd90HCKQ', 18);
-//   addItem('post-its', 24);
-//   deleteItem('j5BFtr899KOzlGHnv7qI');
-//   getItem('vQZ2hfMlMs2Rsd90HCKQ');
-//   getItemAsync('vQZ2hfMlMs2Rsd90HCKQ');
-  getCollectionAsyncForEach('inventory');
+  // update1234();
+  // updateQuantity('W6646Cq0NfdMBhGfLWhg', 18);
+  // addItem('post-its', 24);
+  // addItemAsync('notebooks', 7);
+  // deleteItem('bg3dU5alMaisOsaJCZ00');
+  // getItemAsync('W6646Cq0NfdMBhGfLWhg');
+  getCollectionAsync('inventory');
 }
 
 main();

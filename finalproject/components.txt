@@ -1,3 +1,6 @@
-    react-navigation
+    react-navigation (week 7)
 expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
 
+    firebase (week 8)
+yarn add firebase
+yarn add node-fetch
