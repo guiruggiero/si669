@@ -23,13 +23,11 @@ class DataModel {
             data.key = key;
             this.users.push(data);
         });
-        console.log("Got users:", this.users); // sanity check--remove once it works
     }
 
     getUsers = () => {
         return this.users;
     }
-
 
     createUser = async (email, pass, dispName) => {
         // assemble the data structure

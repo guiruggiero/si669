@@ -4,3 +4,10 @@ expo install react-native-gesture-handler react-native-reanimated react-native-s
     firebase (week 8)
 yarn add firebase
 yarn add node-fetch
+
+    camera (week 11)
+expo install firebase expo-camera expo-permissions
+yarn add @react-navigation/native
+expo install react-native-gesture-handler react-native-reanimated 
+expo install react-native-screens react-native-safe-area-context @react-native-community/masked-view
+yarn add @react-navigation/stack

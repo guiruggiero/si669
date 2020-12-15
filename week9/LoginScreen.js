@@ -57,7 +57,6 @@ export class LoginScreen extends React.Component {
     });
   }
 
-
   onLogin = () => {
     let users = this.dataModel.getUsers();
     let email = this.state.emailInput;
