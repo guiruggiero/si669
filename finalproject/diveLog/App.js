@@ -1,21 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// SI 669 - Final Project
+// Developed by Gui Ruggiero
+// Repo: https://github.com/SI669-classroom-f20/final-project-guiruggiero
 
-export default function App() {
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { LoginScreen } from './LoginScreen';
+import { TimelineScreen } from './TimelineScreen';
+import { DiveScreen } from './DiveScreen';
+import { CameraScreen } from './CameraScreen';
+
+const Stack = createStackNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator 
+        initialRouteName="Login"
+        screenOptions={{
+          headerShown: true // FLAG
+        }}
+      >
+        <Stack.Screen name="Login" component={LoginScreen} />
+
+        <Stack.Screen name="Timeline" component={TimelineScreen} />
+
+        <Stack.Screen name="Dive" component={DiveScreen} />
+
+        <Stack.Screen name="Camera" component={CameraScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
