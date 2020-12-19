@@ -2,40 +2,27 @@ import React from 'react';
 import { Text, View, FlatList, TouchableOpacity } from 'react-native';
 
 import { timelineStyles } from './Styles';
+import { getDataModel } from './DataModel';
 
 export class TimelineScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    this.dataModel = getDataModel();
+    this.currentUser = this.props.route.params.currentUser;
 
+    this.state = {diveList: []}
 
-    this.nextKey = 0;
-    this.state = {
-      theList: [],
-      emptyMessage: "Nothing here yet. Tap '+' to add!"
-    }
-  }
-
-  getList = async () => {
-    appList = [];
-    let qSnap = await listCollRef.get();
-    qSnap.forEach(qDocSnap => {
-      let data = qDocSnap.data();
-      data.key = qDocSnap.id;
-      appList.push(data);
-    })
-
-    this.setState({theList: appList}); // populates app data model
-
-    // if there are items on list, deletes empty message
-    if (appList.length != 0) {
-      this.setState({emptyMessage: ""});
-    }
+    console.log('Timeline created'); // changed
+    console.log(this.state.diveList);
+    console.log(this.currentUser);
+    console.log(this.currentUser.key);
   }
 
   componentDidMount() {
     this.focusUnsubscribe = this.props.navigation.addListener('focus', this.onFocus);
-    this.getList();
+
+    console.log('Timeline mounted') // changed
   }
 
   componentWillUnmount() {
@@ -43,125 +30,55 @@ export class TimelineScreen extends React.Component {
   }
 
   onFocus = () => {
-    if (this.props.route.params) {
-      const {operation, item} = this.props.route.params;
-      if (operation === 'add') {
-        this.addItem(item.text);
-      } else if (operation === 'edit') {
-        this.updateItem(item.key, item.text);
-      } 
-    }
+    this.setState({diveList: this.dataModel.getDives(this.currentUser.key)});
     this.props.navigation.setParams({operation: 'none'});
-  }
 
-  addItem = async (itemText) => {
-    if (itemText) { // false if undefined
-      let docRef = await listCollRef.add({text: itemText}); // adds to FB
-      itemText.key = docRef.id; // gets FB autoID
-
-      appList.push({text: itemText, key: itemText.key});
-    }
-    this.setState({theList: appList}); // adds to app data model
-
-    // if there are items on list, deletes empty message
-    if (appList.length != 0) {
-      this.setState({emptyMessage: ""});
-    }
-  }
-
-  onDelete = (itemKey) => {
-    this.deleteItem(itemKey);
-  }
-
-  deleteItem = async (itemKey) => {
-    // deletes from FB
-    let docRef = listCollRef.doc(itemKey);
-    await docRef.delete();
-
-    // deletes from app data model
-    appList = this.state.theList;
-    let foundIndex = -1;
-    for (let idx in appList) {
-      if (appList[idx].key === itemKey) {
-        foundIndex = idx;
-        break;
-      }
-    }
-    if (foundIndex !== -1) { // silently fail if item not found
-      appList.splice(foundIndex, 1); // remove one element 
-    }
-    this.setState({theList: appList});
-
-    // if no more items on list, restores empty message
-    if (appList.length === 0) {
-      this.setState({emptyMessage: "Nothing here yet. Tap '+' to add"});
-    }
-  }
-
-  onEdit = (item) => {
-    this.props.navigation.navigate("Detail", {
-      operation: 'edit',
-      item: item
-    });
-  }
-
-  updateItem = async (itemKey, itemText) => {
-    // updates FB
-    let docRef = listCollRef.doc(itemKey);
-    await docRef.update({text: itemText});
-
-    // updates app data model
-    appList = this.state.theList;
-    let foundIndex = -1;
-    for (let idx in appList) {
-      if (appList[idx].key === itemKey) {
-        foundIndex = idx;
-        break;
-      }
-    }
-    if (foundIndex !== -1) { // silently fail if item not found
-      appList[foundIndex].text = itemText;
-    }
-    this.setState({theList: appList});
+    console.log('Timeline received focus, dives updated and filtered'); // changed
+    console.log(this.state.diveList);
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
-            {appName}
-          </Text>
-        </View>
-        <View style={styles.body}>
-          <Text>
-          {/* <Text style={styles.???}> */}
-            {this.state.emptyMessage}
-          </Text>
-          <View style={styles.listContainer}>
+      <View style={timelineStyles.container}>
+        <View style={timelineStyles.body}>
+          <View style={timelineStyles.listContainer}>
             <FlatList
-              data={this.state.theList}
+              data={this.state.diveList}
+
               ItemSeparatorComponent={()=>(
-                <View style={styles.separator}
-                />
+                <View style={timelineStyles.separator}/>
               )}
-              renderItem={({item})=>{
+
+              renderItem={({dive})=>{
                 return(
-                  <View style={styles.listItemContainer}>
-                    <View style={styles.listItemTextContainer}> 
-                      <Text style={styles.listItemText}>
-                        {item.text}
+                  <View style={timelineStyles.listDiveContainer}>
+                    <View style={timelineStyles.listDiveTextContainer}> 
+                      <Text style={timelineStyles.listDiveText}>
+                        {dive.day} - {dive.diveSite}, {dive.country}
+                        {console.log(dive.day + '-' + dive.diveSite + ',' + dive.country)} {/* changed */}
                       </Text> 
                     </View>
-                    <View style={styles.listItemButtonContainer}>
-                      <Ionicons name="md-create" 
+
+                    <View style={timelineStyles.listDiveButtonContainer}>
+                      <Ionicons name="md-create"
                         size={24} 
                         color={colors.primaryDark}
-                        onPress={()=>{this.onEdit(item)}} />
+
+                        onPress={()=>{this.props.navigation.navigate("Dive", {
+                          operation: 'edit',
+                          dive: dive});
+
+                          console.log('Passing to Dive to edit:' + dive) // changed
+                        }}
+                       />
+
                       <Ionicons name="md-trash" 
                         size={24} 
                         color={colors.primaryDark}
-                        onPress={()=>{this.onDelete(item.key)}} />
+
+                        onPress={()=>{this.dataModel.deleteDive(dive.key);
+                          console.log('To be deleted:' + dive.key) // changed
+                        }} />
                     </View>
                   </View>
                 );
@@ -169,11 +86,11 @@ export class TimelineScreen extends React.Component {
             />
           </View>
         </View>
-        <View style={styles.footer}>
+
+        <View style={timelineStyles.footer}>
           <TouchableOpacity
-            onPress={()=>
-              this.props.navigation.navigate('Detail', 
-                {operation: "add"})}>
+            onPress={()=>{this.props.navigation.navigate('Dive',
+              {operation: "add"})}}>
             <Ionicons name="md-add-circle" 
               size={80} 
               color={colors.primaryDark} />

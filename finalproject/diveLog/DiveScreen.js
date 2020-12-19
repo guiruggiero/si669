@@ -3,20 +3,52 @@ import { TextInput, Text, View, FlatList, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'; // FLAG
 
 import { diveStyles } from './Styles';
+import { getDataModel } from './DataModel';
 
 export class DiveScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    let country, diver, diveSite, gas, location, notes, pictureURL; // string
+    let maxDepth, pictureHeight, pictureWidth, rating, tempBottom, tempSurface, totalTime, weights; // number 
+    let favorite; // boolean
 
+    // FLAG
+    let latitude, longitude; // let coordinates; // geopoint, [41.0153513° N, 83.9355813° W]
+    let day, time; // let start; // timestamp, October 11, 2020 at 12:34:00 PM UTC-5 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 
-    this.operation = this.props.route.params.operation;
+    let dive = {
+      country: '',
+      day: '',
+      diver: '',
+      diveSite: '',
+      gas: '',
+      location: '',
+      notes: '',
+      pictureURL: '',
+      time: '',
 
-    let initText = '';
-    if (this.operation === 'edit') {
-      initText = this.props.route.params.item.text;
+      latitude: 0,
+      longitude: 0,
+      maxDepth: 0,
+      pictureHeight: 0,
+      pictureWidth: 0,
+      rating: 0,
+      tempBottom: 0,
+      tempSurface: 0,
+      totalTime: 0,
+      weights: 0,
+
+      favorite: false
     }
 
+    // mode C (add) or RU (edit)
+    this.operation = this.props.route.params.operation;
+    if (this.operation === 'edit') {
+      initTexts = this.props.route.params.dive; // FLAG
+    }
+
+    let initTexts = '';
     this.state = {
       inputText: initText
     }
@@ -28,7 +60,8 @@ export class DiveScreen extends React.Component {
         <View style={styles.body}>
           <View style={styles.textInputContainer}>
             <Text style={styles.textInputLabel}>
-              {this.operation === 'add'? "Add" : "Edit"} Item</Text>
+              {this.operation === 'add'? "Add" : "Edit"} dive</Text>
+
             <TextInput
               placeholder='Enter item text'
               style={styles.textInputBox}
@@ -41,11 +74,12 @@ export class DiveScreen extends React.Component {
           <View style={styles.footerButtonContainer}>
             <TouchableOpacity 
               style={styles.footerButton}
+
               onPress={()=>{this.props.navigation.navigate("Home")}}>
               <Text>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.footerButton}
+
+            <TouchableOpacity style={styles.footerButton}
               onPress={()=>{
                 let theItem = {};
                 if (this.operation === 'add') {
@@ -53,10 +87,13 @@ export class DiveScreen extends React.Component {
                     text: this.state.inputText,
                     key: -1 // placeholder for "no ID"
                   }
-                } else { // operation === 'edit'
+                }
+                
+                else { // operation === 'edit'
                   theItem = this.props.route.params.item;
                   theItem.text = this.state.inputText;
                 }
+                
                 this.props.navigation.navigate("Home", {
                   operation: this.operation,
                   item: theItem

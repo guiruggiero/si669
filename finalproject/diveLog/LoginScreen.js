@@ -29,7 +29,6 @@ export class LoginScreen extends React.Component {
     let users = this.dataModel.getUsers();
     for (let user of users) {
       if (user.email === this.state.emailInput) {
-        // console.log("Found matching user");
         
         Alert.alert(
           'Duplicate user',
@@ -42,7 +41,6 @@ export class LoginScreen extends React.Component {
     }
     
     // made it through loop, no user exists!
-    // console.log("No matching user found, creating");
     let newUser = await this.dataModel.addUser(
       this.state.emailInput,
       this.state.passwordInput,

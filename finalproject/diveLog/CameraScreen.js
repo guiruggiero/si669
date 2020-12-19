@@ -13,7 +13,7 @@ export class CameraScreen extends React.Component {
     super(props);
 
     this.dataModel = getDataModel();
-    this.dive = this.props.route.params.dive;
+    this.diveKey = this.props.route.params.diveKey; // FLAG
 
     this.state = {
       hasCameraPermission: null,
@@ -34,7 +34,7 @@ export class CameraScreen extends React.Component {
 
   handleTakePicture = async () => {
     let picData = await this.camera.takePictureAsync();
-    this.dataModel.addDivePicture(this.dive, picData);
+    this.dataModel.addDivePicture(this.diveKey, picData);
     this.props.navigation.goBack();
   }
 
@@ -59,7 +59,7 @@ export class CameraScreen extends React.Component {
             style={cameraStyles.container}
 
             type={this.state.type}
-            ratio='4:3' // distorted? FLAG
+            ratio='4:3'
             pictureSize='Medium'
             ref={this.setupCamera}
           >

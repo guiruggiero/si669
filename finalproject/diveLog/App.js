@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { LoginScreen } from './LoginScreen';
 import { TimelineScreen } from './TimelineScreen';
-import { DiveScreen } from './DiveScreen';
+// import { DiveScreen } from './DiveScreen';
 import { CameraScreen } from './CameraScreen';
 
 const Stack = createStackNavigator();
@@ -19,14 +19,14 @@ function App() {
       <Stack.Navigator 
         initialRouteName="Login"
         screenOptions={{
-          headerShown: true // FLAG
+          headerShown: true
         }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />
 
         <Stack.Screen name="Timeline" component={TimelineScreen} />
 
-        <Stack.Screen name="Dive" component={DiveScreen} />
+        {/* <Stack.Screen name="Dive" component={DiveScreen} /> */}
 
         <Stack.Screen name="Camera" component={CameraScreen} />
       </Stack.Navigator>

@@ -34,22 +34,12 @@ class DataModel {
     });
   }
 
-  loadDives = async () => { // userKey as argument? Where is this (or loadChats) called? FLAG
+  loadDives = async () => {
     let querySnap = await this.divesRef.get();
     querySnap.forEach(qDocSnap => {
-      // if qDocSnap.diver === userKey FLAG
-      
-      console.log(qDocSnap);
-
       let key = qDocSnap.id;
-      console.log(key);
-
       let data = qDocSnap.data();
-      console.log(data);
-      console.log(data.key);
-
       data.key = key;
-
       this.dives.push(data);
     });
   }
@@ -58,8 +48,16 @@ class DataModel {
     return this.users;
   }
 
-  getDives = () => {
-    return this.dives;
+  getDives = (userKey) => {
+    // let divesFromUser = [];
+    // for (let dive of this.dives) {
+    //   if (dive.diver === userKey) {
+    //     divesFromUser.push(dive);
+    //   }
+    // }
+    // return divesFromUser;
+
+    return this.dives.where('diver', 'equals', userKey);
   }
 
   addUser = async (email, pass, dispName) => {
@@ -84,7 +82,7 @@ class DataModel {
   addDive = async () => { // add all fields as arguments FLAG
     // assemble the data structure
     let newDive = {
-      // all fields FLAG
+      // all fields
     }
 
     // add the data to Firebase (dives collection)
@@ -98,25 +96,49 @@ class DataModel {
     return newDive;
   }
 
-  getUserForID = (id) => {
-    for (let user of this.users) {
-      if (user.key === id) {
-        return user; // will return undefined
+  editDive = async (dive) => { // FLAG
+
+
+    // updates FB
+    let docRef = listCollRef.doc(itemKey);
+    await docRef.update({text: itemText});
+
+    // updates app data model
+    appList = this.state.diveList;
+    let foundIndex = -1;
+    for (let idx in appList) {
+      if (appList[idx].key === itemKey) {
+        foundIndex = idx;
+        break;
       }
+    }
+    if (foundIndex !== -1) { // silently fail if item not found
+      appList[foundIndex].text = itemText;
+    }
+    this.setState({diveList: appList});
+  }
+
+  deleteDive = async (diveKey) => {
+    // deletes from FB
+    let docRef = divesRef.doc(diveKey);
+    await docRef.delete();
+
+    // deletes from app data model
+    let foundIndex = -1;
+    for (let idx in this.dives) {
+      if (this.dives[idx].key === diveKey) {
+        foundIndex = idx;
+        break;
+      }
+    }
+    if (foundIndex !== -1) { // silently fail if item not found
+      this.dives.splice(foundIndex, 1); // remove one element 
     }
   }
 
-  getDiveForID = (id) => {
-    for (let dive of this.dives) {
-      if (dive.key === id) {
-        return dive; // will return undefined
-      }
-    }
-  }
-
-  addDivePicture = async (dive, pictureObject) => {
+  addDivePicture = async (diveKey, pictureObject) => {
     // set up storage ref and file name
-    let fileName = dive.key;
+    let fileName = diveKey;
     let pictureRef = this.storageRef.child(fileName);
 
     // fetch the picture object from the local filesystem
@@ -124,13 +146,13 @@ class DataModel {
     let pictureBlob = await response.blob();
 
     // upload it to Firebase Storage
-    await pictureRef.put(pictureBlob); // replaces too? FLAG
+    await pictureRef.put(pictureBlob);
 
     // get picture URL
     let downloadURL = await pictureRef.getDownloadURL();
     
     // update dive with picture and store in Firebase
-    let diveRef = this.divesRef.doc(dive.key);
+    let diveRef = this.divesRef.doc(diveKey);
     await diveRef.update({
       pictureURL: downloadURL,
       pictureHeight: pictureObject.height,
