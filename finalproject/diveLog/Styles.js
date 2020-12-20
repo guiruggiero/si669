@@ -33,7 +33,6 @@ export const loginStyles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
-      //backgroundColor: 'lightgreen'
     },
       inputRow: {
         flexDirection: 'row',
@@ -100,17 +99,12 @@ export const cameraStyles = StyleSheet.create({
 });
 
 export const timelineStyles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'stretch',
-      justifyContent: 'flex-start',
-    },
-    separator: {
-        width: '100%', 
-        height: 1, 
-        backgroundColor: colors.primaryLight
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+  },
     body: {
       flex: 0.85,
       alignItems: 'stretch',
@@ -125,7 +119,11 @@ export const timelineStyles = StyleSheet.create({
         alignItems: 'stretch', // this turns out to be important!
         padding: 15,
       },
-        // Body
+        separator: {
+          width: '100%', 
+          height: 1, 
+          backgroundColor: colors.primaryLight
+        },
         listDiveContainer: {
           flex: 1,
           flexDirection: 'row',
@@ -133,27 +131,25 @@ export const timelineStyles = StyleSheet.create({
           justifyContent: 'center',
           paddingVertical: 10,
         },
-        listDiveTextContainer: {
-          flex: 0.8,
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-        },
-          listDiveText: {
-            fontSize: 18,
+          listDiveTextContainer: {
+            flex: 0.9,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
           },
-        listDiveButtonContainer: {
-          flex: 0.2,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
+            listDiveText: {
+              fontSize: 18,
+            },
+          listDiveButtonContainer: {
+            flex: 0.1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          },
     footer: {
       flex: 0.15,
       justifyContent: 'flex-start',
       alignItems: 'center',
     },
 });
-
-
 
 export const diveStyles = StyleSheet.create({
   container: {
@@ -162,78 +158,72 @@ export const diveStyles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
   },
-  separator: {
-      width: '100%', 
-      height: 1, 
-      backgroundColor: colors.primaryLight
-  },
-  header: {
-    flex: 0.1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    width: '100%',
-    padding: 10,
-    backgroundColor: colors.primary,
-  },
-    headerText: {
-      fontSize: 24,
+    header: {
+      flex: 0.05,
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      width: '100%',
+      padding: 10,
     },
-  body: {
-    flex: 0.4,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    width: '100%',
-    padding: '5%',
-  },
-    listHeaderText: {
-      fontSize: 16,
-      padding: 15
-    },  
-    listContainer: {
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-      alignItems: 'stretch', // this turns out to be important!
-      padding: 15,
-    },
-      // Body
-      textInputContainer: {
-        flex: 0.3,
-        justifyContent: 'center',
-        alignItems: 'center',
+      headerText: {
+        fontSize: 22,
       },
-        textInputLabel: {
-          fontSize: 24,
-          paddingBottom: 15
+    body: {
+      flex: 0.8,
+      alignItems: 'stretch',
+      justifyContent: 'center',
+      width: '100%',
+    },
+      // imageContainer: { // FLAG
+      //   flex: 0.3,
+      //   justifyContent: 'flex-start',
+      // },
+      fieldsContainer: {
+        flex: 1, // 0.7
+        justifyContent: 'flex-start',
+      },
+        fieldRow: {
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          paddingVertical: 5
         },
-        textInputBox: {
+          fieldLabel: {
+            flex: 0.6,
+            justifyContent: 'flex-start',
+            textAlign: 'right',
+            fontSize: 20
+          },
+          fieldBox: {
+            borderColor: colors.outline,
+            borderWidth: 1,
+            width: '70%', 
+            height: 40, 
+            fontSize: 20,
+            padding: 5,
+          },
+    footer: {
+      flex: 0.15,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+      footerButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+      },
+        footerButton: {
+          flex: 0.2,
+          borderRadius: 12,
           borderColor: colors.outline,
           borderWidth: 1,
-          width: '80%', 
-          height: 40, 
-          fontSize: 24,
-          padding: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 20,
+          marginHorizontal: '5%',
+          backgroundColor: colors.primaryDark
         },
-  footer: {
-    flex: 0.2,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-
-    // Footer
-    footerButtonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-around'
-    },
-      footerButton: {
-        flex: 0.2,
-        borderRadius: 12,
-        borderColor: colors.outline,
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        marginHorizontal: '5%',
-        backgroundColor: colors.primaryDark
-      }
+          footerButtonText: {
+            textAlign: 'center',
+            color: 'white'
+          }
 });

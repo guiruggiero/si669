@@ -1,6 +1,5 @@
 import React from 'react';
-import { TextInput, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // FLAG
+import { TextInput, Text, View, TouchableOpacity } from 'react-native';
 
 import { diveStyles } from './Styles';
 import { getDataModel } from './DataModel';
@@ -9,97 +8,141 @@ export class DiveScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    let country, diver, diveSite, gas, location, notes, pictureURL; // string
-    let maxDepth, pictureHeight, pictureWidth, rating, tempBottom, tempSurface, totalTime, weights; // number 
-    let favorite; // boolean
-
-    // FLAG
-    let latitude, longitude; // let coordinates; // geopoint, [41.0153513° N, 83.9355813° W]
-    let day, time; // let start; // timestamp, October 11, 2020 at 12:34:00 PM UTC-5 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-
-    let dive = {
-      country: '',
-      day: '',
-      diver: '',
-      diveSite: '',
-      gas: '',
-      location: '',
-      notes: '',
-      pictureURL: '',
-      time: '',
-
-      latitude: 0,
-      longitude: 0,
-      maxDepth: 0,
-      pictureHeight: 0,
-      pictureWidth: 0,
-      rating: 0,
-      tempBottom: 0,
-      tempSurface: 0,
-      totalTime: 0,
-      weights: 0,
-
-      favorite: false
-    }
-
-    // mode C (add) or RU (edit)
+    this.dataModel = getDataModel();
     this.operation = this.props.route.params.operation;
+
+    let diver = ''; 
+    let key = '';
+    let day = '';
+    let diveSite = '';
+    let country = '';
     if (this.operation === 'edit') {
-      initTexts = this.props.route.params.dive; // FLAG
+      diver = this.props.route.params.dive.diver;
+      key = this.props.route.params.dive.key;
+      day = this.props.route.params.dive.day;
+      diveSite = this.props.route.params.dive.diveSite;
+      country = this.props.route.params.dive.country;
+    } else { // this.operation === 'add'
+      diver = this.props.route.params.diver;
     }
 
-    let initTexts = '';
     this.state = {
-      inputText: initText
+      diver: diver,
+      key: key,
+      day: day,
+      diveSite: diveSite,
+      country: country
     }
+  }
+  
+  async onSave() {
+    if (this.operation === 'add') {
+      await this.dataModel.addDive(
+        this.state.diver,
+        this.state.day,
+        this.state.diveSite,
+        this.state.country
+      );
+    }
+
+    else { // operation === 'edit'
+      await this.dataModel.editDive(
+        this.state.key,
+
+        this.state.diver,
+        this.state.day,
+        this.state.diveSite,
+        this.state.country
+      );
+    }
+
+    this.props.navigation.navigate("Timeline");
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.body}>
-          <View style={styles.textInputContainer}>
-            <Text style={styles.textInputLabel}>
-              {this.operation === 'add'? "Add" : "Edit"} dive</Text>
+      <View style={diveStyles.container}>
+        <View style={diveStyles.header}>
+          <Text style={diveStyles.headerText}>
+            {this.operation === 'add'? "Add" : "Edit"}
+          </Text>
+        </View>
 
-            <TextInput
-              placeholder='Enter item text'
-              style={styles.textInputBox}
-              onChangeText={(text) => this.setState({inputText: text})}
-              value={this.state.inputText}
-            />
+        <View style={diveStyles.body}>
+          {/* <View style={diveStyles.imageContainer}> FLAG
+          </View> */}
+
+          <View style={diveStyles.fieldsContainer}>
+            <View style={diveStyles.fieldRow}>
+              <Text style={diveStyles.fieldLabel}>
+                Day:
+              </Text>
+
+              <TextInput
+                style={diveStyles.fieldBox}
+
+                placeholder="MM.DD.YYYY"
+                keyboardType="numeric"
+                autoCorrect={false}
+
+                value={this.state.day}
+
+                onChangeText={(text) => this.setState({day: text})}
+              />
+            </View>
+
+            <View style={diveStyles.fieldRow}>
+              <Text style={diveStyles.fieldLabel}>
+                Dive site:
+              </Text>
+
+              <TextInput
+                style={diveStyles.fieldBox}
+
+                autoCapitalize="words"
+                autoCorrect={true}
+
+                value={this.state.diveSite}
+
+                onChangeText={(text) => this.setState({diveSite: text})}
+              />
+            </View>
+
+            <View style={diveStyles.fieldRow}>
+              <Text style={diveStyles.fieldLabel}>
+                Country:
+              </Text>
+
+              <TextInput
+                style={diveStyles.fieldBox}
+
+                autoCapitalize="words"
+                autoCorrect={true}
+
+                value={this.state.country}
+
+                onChangeText={(text) => this.setState({country: text})}
+              />
+            </View>
           </View>
         </View>
-        <View style={styles.footer}>
-          <View style={styles.footerButtonContainer}>
-            <TouchableOpacity 
-              style={styles.footerButton}
 
-              onPress={()=>{this.props.navigation.navigate("Home")}}>
-              <Text>Cancel</Text>
+        <View style={diveStyles.footer}>
+          <View style={diveStyles.footerButtonContainer}>
+            <TouchableOpacity 
+              style={diveStyles.footerButton}
+
+              onPress={()=>{this.props.navigation.navigate("Timeline")}}
+            >
+              <Text style={diveStyles.footerButtonText}>Cancel</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.footerButton}
-              onPress={()=>{
-                let theItem = {};
-                if (this.operation === 'add') {
-                  theItem = {
-                    text: this.state.inputText,
-                    key: -1 // placeholder for "no ID"
-                  }
-                }
-                
-                else { // operation === 'edit'
-                  theItem = this.props.route.params.item;
-                  theItem.text = this.state.inputText;
-                }
-                
-                this.props.navigation.navigate("Home", {
-                  operation: this.operation,
-                  item: theItem
-                });
-              }}>
-              <Text style={styles.footerButtonText}>Save</Text>
+            <TouchableOpacity
+              style={diveStyles.footerButton}
+              
+              onPress={()=>{this.onSave()}}
+            >
+              <Text style={diveStyles.footerButtonText}>Save</Text>
             </TouchableOpacity>
           </View>
         </View>

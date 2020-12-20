@@ -51,7 +51,13 @@ export class TimelineScreen extends React.Component {
 
               renderItem={({item})=>{
                 return(
-                  <View style={timelineStyles.listDiveContainer}>
+                  <TouchableOpacity 
+                    style={timelineStyles.listDiveContainer}
+                    onPress={()=>{this.props.navigation.navigate("Dive", {
+                      operation: "edit",
+                      dive: item})
+                    }}
+                  >
                     <View style={timelineStyles.listDiveTextContainer}> 
                       <Text style={timelineStyles.listDiveText}>
                         {item.day} - {item.diveSite}, {item.country}
@@ -59,23 +65,13 @@ export class TimelineScreen extends React.Component {
                     </View>
 
                     <View style={timelineStyles.listDiveButtonContainer}>
-                      <Ionicons name="md-create"
-                        size={24} 
-                        color={colors.primaryDark}
-
-                        onPress={()=>{this.props.navigation.navigate("Dive", {
-                          operation: 'edit',
-                          dive: item});
-                        }}
-                       />
-
                       <Ionicons name="md-trash" 
                         size={24} 
                         color={colors.primaryDark}
 
                         onPress={()=>{this.onDelete(item.key)}} />
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 );
               }}
             />
@@ -84,9 +80,11 @@ export class TimelineScreen extends React.Component {
 
         <View style={timelineStyles.footer}>
           <TouchableOpacity
-            onPress={()=>{this.props.navigation.navigate('Dive',
-              {operation: "add"})}}>
-            <Ionicons name="md-add-circle" 
+            onPress={()=>{this.props.navigation.navigate("Dive", {
+              operation: "add",
+              diver: this.userKey})
+            }}>
+            <Ionicons name="md-add-circle"
               size={80} 
               color={colors.primaryDark} />
           </TouchableOpacity>

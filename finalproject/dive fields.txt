@@ -1,0 +1,32 @@
+let country, diver, diveSite, gas, location, notes, pictureURL; // string
+let maxDepth, pictureHeight, pictureWidth, rating, tempBottom, tempSurface, totalTime, weights; // number 
+let favorite; // boolean
+
+// FLAG
+let latitude, longitude; // let coordinates; // geopoint, [41.0153513° N, 83.9355813° W]
+let day, time; // let start; // timestamp, October 11, 2020 at 12:34:00 PM UTC-5 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+
+let dive = {
+  country: '',
+  day: '',
+  diver: '',
+  diveSite: '',
+  gas: '',
+  location: '',
+  notes: '',
+  pictureURL: '',
+  time: '',
+
+  latitude: 0,
+  longitude: 0,
+  maxDepth: 0,
+  pictureHeight: 0,
+  pictureWidth: 0,
+  rating: 0,
+  tempBottom: 0,
+  tempSurface: 0,
+  totalTime: 0,
+  weights: 0,
+
+  favorite: false
+}

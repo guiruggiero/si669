@@ -8,8 +8,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { LoginScreen } from './LoginScreen';
 import { TimelineScreen } from './TimelineScreen';
-// import { DiveScreen } from './DiveScreen';
-import { CameraScreen } from './CameraScreen';
+import { DiveScreen } from './DiveScreen';
+// import { CameraScreen } from './CameraScreen'; // FLAG
 
 const Stack = createStackNavigator();
 
@@ -26,12 +26,13 @@ function App() {
 
         <Stack.Screen name="Timeline" component={TimelineScreen} />
 
-        {/* <Stack.Screen name="Dive" component={DiveScreen} /> */}
+        <Stack.Screen name="Dive" component={DiveScreen} />
 
-        <Stack.Screen name="Camera" component={CameraScreen} />
+        {/* <Stack.Screen name="Camera" component={CameraScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
 
 export default App;

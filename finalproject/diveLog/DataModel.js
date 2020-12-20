@@ -77,12 +77,15 @@ class DataModel {
     return newUser;
   }
 
-  addDive = async () => { // add all fields as arguments FLAG
+  addDive = async (diver, day, diveSite, country) => {
     // assemble the data structure
     let newDive = {
-      // all fields
+      diver: diver,
+      day: day,
+      diveSite: diveSite,
+      country: country
     }
-
+    
     // add the data to Firebase (dives collection)
     let newDiveDocRef = await this.divesRef.add(newDive);
 
@@ -90,30 +93,35 @@ class DataModel {
     let key = newDiveDocRef.id;
     newDive.key = key;
     this.dives.push(newDive);
-
-    return newDive;
   }
 
-  editDive = async (dive) => { // FLAG
+  editDive = async (diveKey, diver, day, diveSite, country) => {
+    // assemble the data structure
+    let editedDive = {
+      diver: diver,
+      day: day,
+      diveSite: diveSite,
+      country: country
+    }
 
-
-    // updates FB
-    let docRef = listCollRef.doc(itemKey);
-    await docRef.update({text: itemText});
+    // updates Firebase
+    let editedDiveDocRef = this.divesRef.doc(diveKey);
+    await editedDiveDocRef.update(editedDive);
 
     // updates app data model
-    appList = this.state.diveList;
+    let divesList = this.dives;
     let foundIndex = -1;
-    for (let idx in appList) {
-      if (appList[idx].key === itemKey) {
+    for (let idx in divesList) {
+      if (divesList[idx].key === diveKey) {
         foundIndex = idx;
         break;
       }
     }
     if (foundIndex !== -1) { // silently fail if item not found
-      appList[foundIndex].text = itemText;
+      editedDive.key = diveKey;
+      divesList[foundIndex] = editedDive;
+      this.dives = divesList;
     }
-    this.setState({diveList: appList});
   }
 
   deleteDive = async (diveKey) => {
@@ -134,7 +142,7 @@ class DataModel {
     }
   }
 
-  addDivePicture = async (diveKey, pictureObject) => {
+  addDivePicture = async (diveKey, pictureObject) => { // not finished FLAG
     // set up storage ref and file name
     let fileName = diveKey;
     let pictureRef = this.storageRef.child(fileName);

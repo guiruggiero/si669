@@ -13,7 +13,7 @@ export class CameraScreen extends React.Component {
     super(props);
 
     this.dataModel = getDataModel();
-    this.diveKey = this.props.route.params.diveKey; // FLAG
+    this.diveKey = this.props.route.params.diveKey;
 
     this.state = {
       hasCameraPermission: null,

@@ -94,9 +94,9 @@ export class LoginScreen extends React.Component {
 
         <View style={loginStyles.middleView}>
           <View style={loginStyles.inputRow}>
-            <Text 
-              style={loginStyles.inputLabel}
-            >Email:</Text>
+            <Text style={loginStyles.inputLabel}>
+              Email:
+            </Text>
 
             <TextInput
               style={loginStyles.inputText}
@@ -115,7 +115,9 @@ export class LoginScreen extends React.Component {
 
           {this.state.mode === 'create' ? (
             <View style={loginStyles.inputRow}>
-              <Text style={loginStyles.inputLabel}>Display name:</Text>
+              <Text style={loginStyles.inputLabel}>
+                Display name:
+              </Text>
 
               <TextInput
                 style={loginStyles.inputText}
@@ -135,7 +137,9 @@ export class LoginScreen extends React.Component {
           )}
 
           <View style={loginStyles.inputRow}>
-            <Text style={loginStyles.inputLabel}>Password:</Text>
+            <Text style={loginStyles.inputLabel}>
+              Password:
+            </Text>
 
             <TextInput
               style={loginStyles.inputText}
@@ -154,7 +158,9 @@ export class LoginScreen extends React.Component {
           </View>
           {this.state.mode === 'create' ? (
             <View style={loginStyles.inputRow}>
-              <Text style={loginStyles.inputLabel}>Re-enter password:</Text>
+              <Text style={loginStyles.inputLabel}>
+                Repeat password:
+              </Text>
 
               <TextInput
                 style={loginStyles.inputText}
