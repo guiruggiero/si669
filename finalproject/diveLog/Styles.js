@@ -112,7 +112,7 @@ export const timelineStyles = StyleSheet.create({
         backgroundColor: colors.primaryLight
     },
     body: {
-      flex: 0.4, // FLAG
+      flex: 0.85,
       alignItems: 'stretch',
       justifyContent: 'center',
       width: '100%',
@@ -147,7 +147,7 @@ export const timelineStyles = StyleSheet.create({
           justifyContent: 'space-between',
         },
     footer: {
-      flex: 0.2,
+      flex: 0.15,
       justifyContent: 'flex-start',
       alignItems: 'center',
     },

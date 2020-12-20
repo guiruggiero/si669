@@ -49,15 +49,13 @@ class DataModel {
   }
 
   getDives = (userKey) => {
-    // let divesFromUser = [];
-    // for (let dive of this.dives) {
-    //   if (dive.diver === userKey) {
-    //     divesFromUser.push(dive);
-    //   }
-    // }
-    // return divesFromUser;
-
-    return this.dives.where('diver', 'equals', userKey);
+    let divesFromUser = [];
+    for (let dive of this.dives) {
+      if (dive.diver === userKey) {
+        divesFromUser.push(dive);
+      }
+    }
+    return divesFromUser;
   }
 
   addUser = async (email, pass, dispName) => {
@@ -120,7 +118,7 @@ class DataModel {
 
   deleteDive = async (diveKey) => {
     // deletes from FB
-    let docRef = divesRef.doc(diveKey);
+    let docRef = this.divesRef.doc(diveKey);
     await docRef.delete();
 
     // deletes from app data model

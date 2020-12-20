@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import { timelineStyles } from './Styles';
+import { timelineStyles, colors } from './Styles';
 import { getDataModel } from './DataModel';
 
 export class TimelineScreen extends React.Component {
@@ -9,32 +10,31 @@ export class TimelineScreen extends React.Component {
     super(props);
 
     this.dataModel = getDataModel();
-    this.currentUser = this.props.route.params.currentUser;
-
-    this.state = {diveList: []}
-
-    console.log('Timeline created'); // changed
-    console.log(this.state.diveList);
-    console.log(this.currentUser);
-    console.log(this.currentUser.key);
+    this.userKey = this.props.route.params.currentUser.key;
+    
+    this.state = {
+      diveList: []
+    }
   }
 
   componentDidMount() {
     this.focusUnsubscribe = this.props.navigation.addListener('focus', this.onFocus);
+  }
 
-    console.log('Timeline mounted') // changed
+  onFocus = () => {
+    let dives = this.dataModel.getDives(this.userKey);
+    this.setState({diveList: dives});
+    
+    this.props.navigation.setParams({operation: 'none'});
   }
 
   componentWillUnmount() {
     this.focusUnsubscribe();
   }
 
-  onFocus = () => {
-    this.setState({diveList: this.dataModel.getDives(this.currentUser.key)});
-    this.props.navigation.setParams({operation: 'none'});
-
-    console.log('Timeline received focus, dives updated and filtered'); // changed
-    console.log(this.state.diveList);
+  onDelete = async (diveKey) => {
+    await this.dataModel.deleteDive(diveKey);
+    this.onFocus();
   }
 
   render() {
@@ -49,13 +49,12 @@ export class TimelineScreen extends React.Component {
                 <View style={timelineStyles.separator}/>
               )}
 
-              renderItem={({dive})=>{
+              renderItem={({item})=>{
                 return(
                   <View style={timelineStyles.listDiveContainer}>
                     <View style={timelineStyles.listDiveTextContainer}> 
                       <Text style={timelineStyles.listDiveText}>
-                        {dive.day} - {dive.diveSite}, {dive.country}
-                        {console.log(dive.day + '-' + dive.diveSite + ',' + dive.country)} {/* changed */}
+                        {item.day} - {item.diveSite}, {item.country}
                       </Text> 
                     </View>
 
@@ -66,9 +65,7 @@ export class TimelineScreen extends React.Component {
 
                         onPress={()=>{this.props.navigation.navigate("Dive", {
                           operation: 'edit',
-                          dive: dive});
-
-                          console.log('Passing to Dive to edit:' + dive) // changed
+                          dive: item});
                         }}
                        />
 
@@ -76,9 +73,7 @@ export class TimelineScreen extends React.Component {
                         size={24} 
                         color={colors.primaryDark}
 
-                        onPress={()=>{this.dataModel.deleteDive(dive.key);
-                          console.log('To be deleted:' + dive.key) // changed
-                        }} />
+                        onPress={()=>{this.onDelete(item.key)}} />
                     </View>
                   </View>
                 );
